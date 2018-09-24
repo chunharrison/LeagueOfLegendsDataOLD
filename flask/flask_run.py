@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, flash, redirect
 from forms import Info, Summoner, Rank
-from riotApi import getSummonerData, getRankData
+from riotApi import getSummonerData, getRankData, getMatchListData, get10Matches
 import requests
 
 app = Flask(__name__)
@@ -35,7 +35,11 @@ def data(region, summonername, api):
 	responseJSONRankData = getRankData(region, str(summoner.summonerID), api)
 	rank = Rank(responseJSONRankData)
 
-	return render_template('data.html', rank=rank)
+	# MATCHES
+	responseJSONMatchListData = getMatchListData(region, str(summoner.accountID), api)
+	matches10 = get10Matches(responseJSONMatchListData["matches"], region, api)
+
+	return render_template('data.html', summoner=summoner, rank=rank, matches10=matches10)
 
 if __name__ == '__main__':
 	app.run(debug=True)

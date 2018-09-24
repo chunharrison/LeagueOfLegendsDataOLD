@@ -16,7 +16,7 @@ class Summoner:
 
 class Rank:
 	def __init__(self, JSONdata):
-		self.rankTierSolo = getRankTier(JSONdata, "SOLO")
-		self.winRateSolo = getWinRate(JSONdata, "SOLO")
-		self.rankTierFlex = getRankTier(JSONdata, "FLEX")
-		self.winRateFlex = getWinRate(JSONdata, "FLEX")
+		self.ranksolo = getRankTier(JSONdata, "SOLO")
+		self.wrsolo = getWinRate(JSONdata, "SOLO")
+		self.rankflex = getRankTier(JSONdata, "FLEX")
+		self.wrflex = getWinRate(JSONdata, "FLEX")

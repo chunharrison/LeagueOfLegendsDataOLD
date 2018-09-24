@@ -1,11 +1,134 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-	{{ summoner.summonerID }}
-	{{ rank.rankTierSolo }}
-	{{ rank.winRateSolo }}
-	{{ rank.rankTierFlex }}
-	{{ rank.winRateFlex }}
+	<h1> {{ summoner.summonername }} </h1>
+
+	<h2>Solo Rank Data</h2>
+    <p> {{ rank.ranksolo }} </p>
+    <p> {{ rank.wrsolo }} </p>
+
+	<h2>Flex Rank Data</h2>
+    <p> {{ rank.rankflex }} </p>
+    <p> {{ rank.wrflex }} </p>
+
+	<h2>Game 1</h2>
+	<h3>Game Mode: {{ matches10[0].mode }}</h3>
+	<h3>Duration: {{ matches10[0].duration }} minutes</h3>
+	</table>
+	<table class="table" style="width:50%">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">Category</th>
+				<th scope="col">Team 1</th>
+				<th scope="col">Team 2</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Tower Kills</td>
+				<td>{{ matches10[0].team1.towerKills }}</td>
+				<td>{{ matches10[0].team2.towerKills }}</td>
+			</tr>
+			<tr>
+				<td>Dragon Kills</td>
+				<td>{{ matches10[0].team1.dragonKills }}</td>
+				<td>{{ matches10[0].team2.dragonKills }}</td>
+			</tr>
+			<tr>
+				<td>Baron Kills</td>
+				<td>{{ matches10[0].team1.baronsKills }}</td>
+				<td>{{ matches10[0].team2.baronsKills }}</td>
+			</tr>
+			<tr>
+				<td>Rift Killed</td>
+				<td>{{ matches10[0].team1.riftKilled }}</td>
+				<td>{{ matches10[0].team2.riftKilled }}</td>
+			</tr>
+		</tbody>
+
+		<thead class="Header thead-dark">
+			<tr class="Row">
+				<th colspan="2">Team 1</th>
+				<th colspan="2">Position</th>
+				<th colspan="2">KDA</th>
+				<th>CS</th>
+				<th>Damage</th>
+				<th>Wards</th>
+			</tr>
+		</thead>
+		<tbody class="Content">
+			<tr class="Row">
+				<td><strong>Summoner Name: </strong>{{ matches10[0].team1.players[0].summonerName }}<br>
+				<strong>Champion: </strong>{{ matches10[0].team1.players[0].champion }}<br>
+				<strong>Level: </strong>{{ matches10[0].team1.players[0].level }}</td>
+
+				<td><strong>Role: </strong>{{ matches10[0].team1.players[0].role }}<br>
+				<strong>Lane: </strong>{{ matches10[0].team1.players[0].lane }}</td>
+
+				<td>{{ matches10[0].team1.players[0].kills }} / {{ matches10[0].team1.players[0].assists }} / {{ matches10[0].team1.players[0].deaths }}</td>
+				
+				<td>{{ matches10[0].team1.players[0].creepsPMfrag }}</td>
+
+				<td><strong>Total Dealt: </strong>{{ matches10[0].team1.players[0].totalDmgToChmps }}<br>
+					<strong>Total Taken: </strong>{{ matches10[0].team1.players[0].totalDmgTaken }}</td>
+
+				<td><strong>Vision Wards: </strong>{{ matches10[0].team1.players[0].visionWards }}</td>
+			</tr>
+			<tr>
+				<td>{{ matches10[0].team1.players[1].summonerName }}</td>
+				<td>{{ matches10[0].team1.players[1].role }}</td>
+				<td>{{ matches10[0].team1.players[1].lane }}</td>
+				<td>{{ matches10[0].team1.players[1].champion }}</td>
+				<td>{{ matches10[0].team1.players[1].level }}</td>
+				<td colspan="2"> <strong>KDA: </strong>{{ matches10[0].team1.players[1].kills }}/{{ matches10[0].team1.players[1].assists }}/{{ matches10[0].team1.players[1].deaths }}</td>
+				<td colspan="2"> <strong>Other Scores: </strong>Creep Score: {{ matches10[0].team1.players[1].creepsPMfrag }}<br>
+				Total Damage Dealt to Champions{{ matches10[0].team1.players[1].totalDmgToChmps }}<br>
+				Total Damage Taken: {{ matches10[0].team1.players[1].totalDmgTaken }}<br>
+				Number of Vision Wards Purchased{{ matches10[0].team1.players[1].visionWards }}</td>
+
+			</tr>
+			<tr>
+				<td>{{ matches10[0].team1.players[2].summonerName }}</td>
+				<td>{{ matches10[0].team1.players[2].role }}</td>
+				<td>{{ matches10[0].team1.players[2].lane }}</td>
+				<td>{{ matches10[0].team1.players[2].champion }}</td>
+				<td>{{ matches10[0].team1.players[2].level }}</td>
+				<td colspan="2"> <strong>KDA: </strong>{{ matches10[0].team1.players[2].kills }}/{{ matches10[0].team1.players[2].assists }}/{{ matches10[0].team1.players[2].deaths }}</td>
+				<td colspan="2"> <strong>Other Scores: </strong>
+				<td>Creep Score: {{ matches10[0].team1.players[2].creepsPMfrag }}<br>
+				Total Damage Dealt to Champions{{ matches10[0].team1.players[2].totalDmgToChmps }}<br>
+				Total Damage Taken: {{ matches10[0].team1.players[2].totalDmgTaken }}<br>
+				Number of Vision Wards Purchased{{ matches10[0].team1.players[2].visionWards }}</td>
+			</tr>
+			<tr>
+				<td>{{ matches10[0].team1.players[3].summonerName }}</td>
+				<td>{{ matches10[0].team1.players[3].role }}</td>
+				<td>{{ matches10[0].team1.players[3].lane }}</td>
+				<td>{{ matches10[0].team1.players[3].champion }}</td>
+				<td>{{ matches10[0].team1.players[3].level }}</td>
+				<td colspan="2"> <strong>KDA: </strong>{{ matches10[0].team1.players[3].kills }}/{{ matches10[0].team1.players[3].assists }}/{{ matches10[0].team1.players[3].deaths }}</td>
+				<td colspan="2"> <strong>Other Scores: </strong>
+				<td>Creep Score: {{ matches10[0].team1.players[3].creepsPMfrag }}<br>
+				Total Damage Dealt to Champions{{ matches10[0].team1.players[3].totalDmgToChmps }}<br>
+				Total Damage Taken: {{ matches10[0].team1.players[3].totalDmgTaken }}<br>
+				Number of Vision Wards Purchased{{ matches10[0].team1.players[3].visionWards }}</td>
+			</tr>
+			<tr>
+				<td>{{ matches10[0].team1.players[4].summonerName }}</td>
+				<td>{{ matches10[0].team1.players[4].role }}</td>
+				<td>{{ matches10[0].team1.players[4].lane }}</td>
+				<td>{{ matches10[0].team1.players[4].champion }}</td>
+				<td>{{ matches10[0].team1.players[4].level }}</td>
+				<td colspan="2"> <strong>KDA: </strong>{{ matches10[0].team1.players[4].kills }}/{{ matches10[0].team1.players[4].assists }}/{{ matches10[0].team1.players[4].deaths }}</td>
+				<td colspan="2"> <strong>Other Scores: </strong>
+				<td>Creep Score: {{ matches10[0].team1.players[4].creepsPMfrag }}<br>
+				Total Damage Dealt to Champions{{ matches10[0].team1.players[4].totalDmgToChmps }}<br>
+				Total Damage Taken: {{ matches10[0].team1.players[4].totalDmgTaken }}<br>
+				Number of Vision Wards Purchased{{ matches10[0].team1.players[4].visionWards }}</td>
+			</tr>
+		</tbody>
+	</table>
+
 	
 
 {% endblock %}

@@ -9,7 +9,7 @@ def getChampionList():
 	response = requests.get(URL)
 	return response.json()
 
-# champList = getChampionList()['data']
+champList = getChampionList()['data']
 
 def getChampName(champID):
 	for name in champList:
@@ -35,7 +35,7 @@ class Player:
 				items.append(itemID)
 			return items
 
-		self.summonrName = summName # string
+		self.summonerName = summName # string
 		self.role = participantData["timeline"]["role"] # string
 		self.lane = participantData["timeline"]["lane"] # string
 		self.champion = getChampName(participantData["championId"]) # string
@@ -171,6 +171,10 @@ def getChampName(champID):
 
 def main():
 
+	# region = 'na1'
+	# summonerName = '980409'
+	# APIKey = 'RGAPI-d41c2cdc-bf97-410b-b311-715f2e1e1297'
+
 	champList = getChampionList()
 
     # important IDs from SummonerData
@@ -211,7 +215,7 @@ def main():
 				-self.riftKilled = True if teamInfo["riftHeraldKills"] == 1 else False
 				-self.players = getPlayers() // list of classes: Player
 					-player:  //Class -> Player:
-						self.summonrName = summName # string
+						self.summonerName = summName # string
 						self.role = participantData["timeline"]["role"] # string
 						self.lane = participantData["timeline"]["lane"] # string
 						self.champion = getChampName(participantData["championId"]) # string
@@ -237,7 +241,7 @@ def main():
 	print first.team1.dragonKills
 	print first.team1.baronKills
 	print first.team1.riftKilled
-	print first.team1.players[0].summonrName
+	print first.team1.players[0].summonerName
 	print first.team1.players[0].role
 	print first.team1.players[0].lane
 	print first.team1.players[0].champion
