@@ -1,0 +1,171 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+
+
+{% block body %}
+	<p>
+	<h1> {{ summoner.summonername }} <img src="{{ url_for('static', filename='profileicon/') }}{{ summoner.iconId }}.png"> </h1>
+	</p>
+	
+	<!-- RANK -->
+	<div class="row mb-2">
+        <div class="col-md-6">
+          <div class="card text-white bg-dark flex-md-row mb-4 shadow-sm h-md-250">
+            <div class="card-body d-flex flex-column align-items-start">
+              <strong class="card-text d-inline-block mb-2 text-primary">Solo</strong>
+              <h3 class="card-text mb-0">{{ summoner.soloRankData.tier }} {{ summoner.soloRankData.rank }}</h3>
+			  <p class="card-text mb-1 text-muted">{{ summoner.soloRankData.leagueName }}</p>
+			  <p class="card-text mb-1">{{ summoner.soloRankData.points }} LP</p>
+			  <p class="card-text mb-auto">{{ summoner.soloRankData.wins }} Wins / {{ summoner.soloRankData.losses }} Losses</p>
+			  <p class="card-text mb-auto"><strong>Win Ratio: {{ summoner.soloRankData.winrate }}%</strong></p>
+            </div>
+            <img class="card-img-right flex-auto d-none d-lg-block" style="width: auto; height: auto;" src="{{ url_for('static', filename='tiers/') }}{{ summoner.soloRankData.tier }}.png">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card text-white bg-dark flex-md-row mb-4 shadow-sm h-md-250">
+            <div class="card-body d-flex flex-column align-items-start">
+				<strong class="card-text d-inline-block mb-2 text-primary">Flex</strong>
+				<h3 class="card-text mb-0">{{ summoner.flexRankData.tier }} {{ summoner.flexRankData.rank }}</h3>
+				<p class="card-text mb-1 text-muted">{{ summoner.flexRankData.leagueName }}</p>
+				<p class="card-text mb-1">{{ summoner.flexRankData.points }} LP</p>
+				<p class="card-text mb-auto">{{ summoner.flexRankData.wins }} Wins / {{ summoner.flexRankData.losses }} Losses</p>
+				<p class="card-text mb-auto"><strong>Win Ratio: {{ summoner.flexRankData.winrate }}%</strong></p>
+			  </div>
+            <img class="card-img-right flex-auto d-none d-lg-block" style="width: auto; height: auto;" src="{{ url_for('static', filename='tiers/') }}{{ summoner.flexRankData.tier }}.png">
+          </div>
+        </div>
+	</div>
+	
+	<!-- GAMES -->
+	{% for game in matches10 %}
+	<div class="panel panel-default">
+		<div class="panel-heading">GAME 1</div>
+		<div class="panel-body">
+				<table class="GameDetailTable table table-danger">
+					<thead class="Header">
+						<tr class="Row">
+							<th class="HeaderCell">Champion</th>
+							<th class="HeaderCell">Spells</th>
+							<th class="HeaderCell">Items</th>
+							<th class="HeaderCell">KDA</th>
+							<th class="HeaderCell">DamageDealt</th>
+							<th class="HeaderCell">DamageTaken</th>
+							<th class="HeaderCell">Wards</th>
+							<th class="HeaderCell">CS</th>
+						</tr>
+					</thead>
+					{% for player in game.team1.players %}
+					<tbody class="Content">
+						<tr class="Row">
+							<td class="ChampionImage Cell">
+								<p class="SummonerName"><strong>{{ player.summonerName }}</strong></p>
+								<img src="{{ url_for('static', filename='champion/') }}{{ player.champion }}.png">
+								<p class="mb-1 text-muted">{{ player.level }}</p>
+							</td>
+							<td class="SummonerSpell Cell">
+								<img src="{{ url_for('static', filename='spells/') }}{{ player.spell1 }}.png">
+								<img src="{{ url_for('static', filename='spells/') }}{{ player.spell2 }}.png">
+							</td>
+							<td class="Items Cell">
+								<p><img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[0] }}.png">
+								<img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[1] }}.png">
+								<img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[2] }}.png">
+								<img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[3] }}.png">
+								<img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[4] }}.png">
+								<img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[5] }}.png">
+								<img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[6] }}.png"></p>
+							</td>
+							<td class="KDA Cell">
+								<span class="KDARatio">{{ player.KDARatio }}</span>
+								<div class="KDA">
+									<span class="Kill">{{ player.kills }}</span> /
+									<span class="Assist">{{ player.assists }}</span> /
+									<span class="Death">{{ player.deaths }}</span>
+								</div>
+							</td>
+							<td class="DamageDealt Cell tip" title="total damage inflicted to champions">
+								{{ player.totalDmgToChmps }}
+							</td>
+							<td class="DamageTaken Cell tip" title="total damage received to champions">
+								{{ player.totalDmgTaken }}
+							</td>
+							<td class="VisionWards Cell tip">
+								{{ player.visionWards }}
+							</td>
+							<td class="CS Cell">
+								<div class="CS">{{ player.creepsKilled }}</div>
+								<div class="CSPerMinute">{{ player.creepsPM }}<p class="text-muted">/m</p></div>
+							</td>	
+						</tr>
+					</tbody>
+					{% endfor %}
+				</table>
+				<table class="GameDetailTable table table-primary">
+					<thead class="Header">
+						<tr class="Row">
+							<th class="HeaderCell">Champion</th>
+							<th class="HeaderCell">Spells</th>
+							<th class="HeaderCell">Items</th>
+							<th class="HeaderCell">KDA</th>
+							<th class="HeaderCell">DamageDealt</th>
+							<th class="HeaderCell">DamageTaken</th>
+							<th class="HeaderCell">Wards</th>
+							<th class="HeaderCell">CS</th>
+						</tr>
+					</thead>
+					{% for player in game.team2.players %}
+					<tbody class="Content">
+						<tr class="Row">
+							<td class="ChampionImage Cell">
+								<p class="SummonerName"><strong>{{ player.summonerName }}</strong></p>
+								<img src="{{ url_for('static', filename='champion/') }}{{ player.champion }}.png">
+								<p class="mb-1 text-muted">{{ player.level }}</p>
+							</td>
+							<td class="SummonerSpell Cell">
+								<img src="{{ url_for('static', filename='spells/') }}{{ player.spell1 }}.png">
+								<img src="{{ url_for('static', filename='spells/') }}{{ player.spell2 }}.png">
+							</td>
+							<td class="Items Cell">
+								<p><img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[0] }}.png">
+								<img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[1] }}.png">
+								<img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[2] }}.png">
+								<img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[3] }}.png">
+								<img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[4] }}.png">
+								<img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[5] }}.png">
+								<img src="{{ url_for('static', filename='items/') }}{{ player.itemIDs[6] }}.png"></p>
+							</td>
+							<td class="KDA Cell">
+								<span class="KDARatio">{{ player.KDARatio }}</span>
+								<div class="KDA">
+									<span class="Kill">{{ player.kills }}</span> /
+									<span class="Assist">{{ player.assists }}</span> /
+									<span class="Death">{{ player.deaths }}</span>
+								</div>
+							</td>
+							<td class="DamageDealt Cell tip" title="total damage inflicted to champions">
+								{{ player.totalDmgToChmps }}
+							</td>
+							<td class="DamageTaken Cell tip" title="total damage received to champions">
+								{{ player.totalDmgTaken }}
+							</td>
+							<td class="VisionWards Cell tip">
+								{{ player.visionWards }}
+							</td>
+							<td class="CS Cell">
+								<div class="CS">{{ player.creepsKilled }}</div>
+								<div class="CSPerMinute">{{ player.creepsPM }}<p class="text-muted">/m</p></div>
+							</td>	
+						</tr>
+					</tbody>
+				{% endfor %}
+				</table>
+		</div>
+	</div>
+	{% endfor %}
+
+{% endblock %}
