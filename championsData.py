@@ -17,3 +17,4 @@ def getChampName(champId):
 		if champList[name]["key"] == str(champId):
 			return name
 	return "non-existing champion"
+	

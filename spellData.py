@@ -12,3 +12,4 @@ def getSummSpellName(spellId):
 		if summSpellData[spell]["key"] == str(spellId):
 			return spell
 	return "non-existing spell"
+	

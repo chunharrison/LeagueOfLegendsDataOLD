@@ -11,7 +11,7 @@ from championsData import getChampionList, getChampName
 def main():
 
     # important IDs from SummonerData
-	responseJSONSummonerData  = getSummonerData(region, summonername, api)
+	responseJSONSummonerData  = getSummonerData(summonername, api)
 	summonerId = str(responseJSONSummonerData["id"])
 	accountID = str(responseJSONSummonerData["accountId"])
 
@@ -32,3 +32,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+	

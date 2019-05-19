@@ -9,7 +9,6 @@ from spellData import getSummSpellName
 
 class Info(FlaskForm):
 	summonername = StringField('Summoner Name', validators=[Length(min=3, max=25)])
-	region = StringField('Region ("na1" for now)')
 	api = StringField('Retreive your API key from ')
 	submit = SubmitField('Search')
 
@@ -19,7 +18,8 @@ class Info(FlaskForm):
 # 			"Summoner" class ([0] for 'SOLO' and [1] for 'FLEX')
 class Rank:
 	def __init__(self, tierInfoDict):
-		self.tier = tierInfoDict["tier"]				#	string
+		self.tier = tierInfoDict["tier"].title()		#	string
+		self.tier_emblem_png = "Emblem_" + self.tier
 		self.rank = tierInfoDict["rank"]				#	string
 		self.points = tierInfoDict["leaguePoints"]   	#	int
 		self.leagueName = tierInfoDict["leagueName"]	#	string
@@ -32,6 +32,7 @@ class Rank:
 # rankJSONdata: JSON object from "getRankData()"
 class Summoner:
 	def __init__(self, summonerJSONdata, region, api):
+		# print("@@@@@@@@@@ summonerJSONdata", summonerJSONdata)
 		self.iconId = summonerJSONdata["profileIconId"] #	int
 		# self.iconId = str(summonerJSONdata["profileIconId"]) + ".png" # string
 		self.summonername = summonerJSONdata["name"]	#	string
@@ -39,10 +40,9 @@ class Summoner:
 		self.accountId = summonerJSONdata["accountId"]	#	long
 
 		rankJSONdata = getRankData(region, str(self.summonerId), api)
-		self.soloRankData = Rank(rankJSONdata[1]) 		#	class: Rank
-		self.flexRankData = Rank(rankJSONdata[0])		#	class: Rank
-
-
+		self.soloRankData = Rank(rankJSONdata[0]) 		#	class: Rank
+		# print(self.soloRankData)
+		# self.flexRankData = Rank(rankJSONdata[0])		#	class: Rank
 
 class Player:
 	def __init__(self, participantData, gameTime, summName):
@@ -74,8 +74,10 @@ class Player:
 		self.kills = participantData["stats"]["kills"] # int
 		self.deaths = participantData["stats"]["deaths"] # int
 		self.assists = participantData["stats"]["assists"] # int
+		if float(self.deaths) <= 0:
+			self.deaths = 1
 		kdaFloat = (float(self.kills) + (float(self.assists) / 3)) / float(self.deaths)
-		self.KDARatio = round(kdaFloat, 1)
+		self.KDARatio = round(kdaFloat, 1) * 100
 
 		# ITEMS AND SPELLS
 		self.spell1 = getSummSpellName(participantData["spell1Id"])
@@ -121,7 +123,8 @@ class Team:
 		self.players = getPlayers()
 
 class Match:
-	def __init__(self, matchJSON):
+	def __init__(self, matchJSON, index):
+		self.index = index
 		self.mode = matchJSON["gameMode"] # string
 		self.duration = round(matchJSON["gameDuration"] / 60)
 		self.team1 = Team(matchJSON, 0) # class
