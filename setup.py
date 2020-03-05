@@ -29,9 +29,11 @@ def data(summonername, api):
 	region = 'na1'
 	# SUMMONER
 	responseJSONSummonerData = getSummonerData(summonername, api)
+	summoner = []
 	try:
 		summoner = Summoner(responseJSONSummonerData, region, api)
-	except:
+	except Exception as e:
+		# return str(e)
 		return render_template('oopsie.html')
 	# summoner = ''
 	# while responseJSONSummonerData.get('status', {'status_code': 200})['status_code'] == 403: 
@@ -41,10 +43,12 @@ def data(summonername, api):
 	# 		responseJSONSummonerData = getSummonerData(summonername, api)
 	# summonername, summonerId, accountId, soloRankData, flexRankData)
 	# print("@@@@@@@@@@ responseJSONSummonerData", responseJSONSummonerData)
-	summoner = Summoner(responseJSONSummonerData, region, api)
+	# summoner = Summoner(responseJSONSummonerData, region, api)
 
 	# MATCHES
+	# print("@@@@@@@@@@ summoner", summoner)
 	responseJSONMatchListData = getMatchListData(region, str(summoner.accountId), api)
+	# print("@@@@@@@@@@ responseJSONMatchListData", responseJSONMatchListData)
 	matches10 = get10Matches(responseJSONMatchListData["matches"], region, api)
 
 	return render_template('data.html', summoner=summoner, matches10=matches10)

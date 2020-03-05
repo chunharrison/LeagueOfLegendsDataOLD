@@ -16,8 +16,8 @@ def getMatchData(region, gameId, api):
 # list of 10 latest matches of the summoner
 def get10Matches(matchlist, region, api):
 	matches = []
-	for x in range(1, 11):
-		matchId = str(matchlist[x]["gameId"])
+	for x in range(10):
+		matchId = str(matchlist[x]["gameId"]) # int
 		responseJSONMatchData = getMatchData(region, matchId, api)
 		match = Match(responseJSONMatchData, x)
 		matches.append(match)

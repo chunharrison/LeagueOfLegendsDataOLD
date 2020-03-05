@@ -3,7 +3,7 @@ import requests
 ### getChampionList()
 # Returns a JSON object that contains static data of every champions in the game
 def getChampionList():
-	URL = "http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_US/champion.json"
+	URL = "http://ddragon.leagueoflegends.com/cdn/10.5.1/data/en_US/champion.json"
 	response = requests.get(URL)
 	return response.json()
 
@@ -16,5 +16,5 @@ def getChampName(champId):
 	for name in champList:
 		if champList[name]["key"] == str(champId):
 			return name
-	return "non-existing champion"
+	return "champId"
 	

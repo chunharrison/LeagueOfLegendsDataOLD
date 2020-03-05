@@ -17,15 +17,15 @@ class Info(FlaskForm):
 # 			"getRankData()"'s JSON object to 
 # 			"Summoner" class ([0] for 'SOLO' and [1] for 'FLEX')
 class Rank:
-	def __init__(self, tierInfoDict):
-		self.tier = tierInfoDict["tier"].title()		#	string
-		self.tier_emblem_png = "Emblem_" + self.tier
-		self.rank = tierInfoDict["rank"]				#	string
-		self.points = tierInfoDict["leaguePoints"]   	#	int
-		self.leagueName = tierInfoDict["leagueName"]	#	string
-		self.winrate = getWinRate(tierInfoDict)			#	float
-		self.wins = tierInfoDict["wins"]				#	int
-		self.losses = tierInfoDict["losses"]			#	int
+	def __init__(self, tierInfoDict, ranked):
+		self.tier = tierInfoDict["tier"].title() if ranked else "Unranked"		#	string
+		self.tier_emblem_png = "Emblem_" + self.tier if ranked else "unranked"
+		self.rank = tierInfoDict["rank"] if ranked else ""				#	string
+		self.points = tierInfoDict["leaguePoints"] if ranked else 0   	#	int
+		# self.leagueName = "" #tierInfoDict["leagueName"]	#	string
+		self.winrate = getWinRate(tierInfoDict) if ranked else 0.0			#	float
+		self.wins = tierInfoDict["wins"] if ranked else 0				#	int
+		self.losses = tierInfoDict["losses"] if ranked else 0			#	int
 
 
 # summonerJSONdata: JSON object from "getSummonerData()"
@@ -36,11 +36,15 @@ class Summoner:
 		self.iconId = summonerJSONdata["profileIconId"] #	int
 		# self.iconId = str(summonerJSONdata["profileIconId"]) + ".png" # string
 		self.summonername = summonerJSONdata["name"]	#	string
-		self.summonerId = summonerJSONdata["id"]		#	long
+		self.summonerId = summonerJSONdata["id"]		#	string
 		self.accountId = summonerJSONdata["accountId"]	#	long
 
 		rankJSONdata = getRankData(region, str(self.summonerId), api)
-		self.soloRankData = Rank(rankJSONdata[0]) 		#	class: Rank
+		if rankJSONdata:
+			self.soloRankData = Rank(rankJSONdata[0], True) 		#	class: Ranks
+		else:
+			self.soloRankData = Rank([], False) 
+
 		# print(self.soloRankData)
 		# self.flexRankData = Rank(rankJSONdata[0])		#	class: Rank
 
@@ -48,10 +52,10 @@ class Player:
 	def __init__(self, participantData, gameTime, summName):
 
 		def getCreepsPM(creepsPMDelta):
-			totalCreepsfragged = 0 
+			creeps_per_min = 0 
 			for timestamp in creepsPMDelta:
-				totalCreepsfragged += creepsPMDelta[timestamp]
-			return totalCreepsfragged
+				creeps_per_min += creepsPMDelta[timestamp]
+			return creeps_per_min / len(creepsPMDelta)
 
 		def getItems(dataStats):
 			items = []
@@ -87,10 +91,14 @@ class Player:
 		self.itemIDs = getItems(participantData["stats"])# array of ints
 
 		# NUMERICAL DATAS
-		self.creepsPMfrag = getCreepsPM(participantData["timeline"]["creepsPerMinDeltas"]) # int
-		self.creepsPM = round(self.creepsPMfrag / (gameTime / 10), 1)
-		self.creepsKilled = int(gameTime / self.creepsPM)
-		self.creepsPM = self.creepsPM * gameTime
+		self.creepsPMfrag = participantData["timeline"]["creepsPerMinDeltas"] # int
+		# self.creepsPM = round(self.creepsPMfrag / (gameTime / 10), 1)
+		self.creepsPM = getCreepsPM(self.creepsPMfrag)
+		# try:
+		# 	self.creepsKilled = int(gameTime / self.creepsPM)
+		# self.creepsKilled = 0 if int(self.creepsPM) == 0 else int(gameTime / self.creepsPM)
+		self.creepsKilled = int(self.creepsPM * gameTime)
+		self.creepsPM = round(self.creepsPM, 1)
 		self.totalDmgToChmps = participantData["stats"]["totalDamageDealtToChampions"] # int
 		self.totalDmgTaken = participantData["stats"]["totalDamageTaken"] # int
 		self.visionWards = participantData["stats"]["visionWardsBoughtInGame"] # int
@@ -106,7 +114,7 @@ class Team:
 
 		def getPlayers():
 			players = []
-			for x, participant  in enumerate(participants):
+			for x, participant in enumerate(participants):
 				if participant["teamId"] == self.teamID:
 					summName = participantIdentities[x]["player"]["summonerName"]
 					globals()["player" + str(x)] = Player(participant, gameTime, summName)

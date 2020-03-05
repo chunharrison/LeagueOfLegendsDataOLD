@@ -11,7 +11,7 @@ import requests
 # 	- summonerId: 	STRING 		| value of the summoner's summonerId
 # 	- api:  		STRING 		| value of the user's(person who is using this program) Riot Games API key
 def getRankData(region, summonerId, api):
-	URL = "https://" + region + ".api.riotgames.com/lol/league/v4/positions/by-summoner/" + summonerId + "?api_key=" + api
+	URL = "https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + summonerId + "?api_key=" + api
 	response = requests.get(URL)
 	return response.json()
 
